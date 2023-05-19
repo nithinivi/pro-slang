@@ -14,7 +14,7 @@ public class Parser extends Lexer {
     }
 
     public Expression parse() throws Exception {
-        prog();
+        return prog();
     }
 
 
