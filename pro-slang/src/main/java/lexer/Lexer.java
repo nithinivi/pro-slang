@@ -159,14 +159,23 @@ public class Lexer {
                 possibleKeyWord += expr.charAt(tempIndex);
             else
                 break;
-
             tempIndex++;
         }
-
         return tokenFromKeyWord;
     }
 
-    private void error(String s) throws Exception {
-        throw new Exception("error " +  s + "while parsing at line number  " + lineNumber  );
+    protected void error(String s) throws Exception {
+        String errorMessage = "error: " + s + " lineno=" + lineNumber +
+                " ch=<" + ch.get() + ">(" + index + ") " +
+                " last word=<" + variableName + ">";
+        throw new Exception(errorMessage);
+    }
+
+    protected String getVariableName() {
+        return variableName;
+    }
+
+    protected Integer getNumber() {
+        return (int) number;
     }
 }

@@ -2,8 +2,11 @@ package ast;
 
 public class Rule extends Expression { // eg. p <= q and r.
 
-    private final Expression lhs;
-    private final Expression rhs;
+    private Expression lhs;
+    private Expression rhs;
+
+    public Rule() {
+    }
 
     public Rule(Expression lhs, Expression rhs) {
         this.lhs = lhs;
@@ -16,5 +19,13 @@ public class Rule extends Expression { // eg. p <= q and r.
 
     public Expression getLhs() {
         return lhs;
+    }
+
+    public void setLhs(Expression lhs) {
+        this.lhs = lhs;
+    }
+
+    public void setRhs(Expression rhs) {
+        this.rhs = rhs;
     }
 }
