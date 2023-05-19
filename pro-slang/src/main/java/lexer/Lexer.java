@@ -11,7 +11,6 @@ public class Lexer {
     int index;
     double number;
     Supplier<Character> ch = () -> this.expr.charAt(this.index);
-    String quotedString;
     String variableName;
     Integer lineNumber;
     private int length;
@@ -25,7 +24,7 @@ public class Lexer {
 
     }
 
-    public TOKEN getSymbol() {
+    public TOKEN getSymbol() throws Exception {
         TOKEN tok = null;
         while (index < length && ch.get() == ' ' || index < length && ch.get() == '\t')
             index++;
@@ -133,10 +132,7 @@ public class Lexer {
             return EOF;
 
         var bld = new StringBuilder();
-        while (index < length &&
-                Character.isAlphabetic(ch.get()) ||
-                Character.isDigit(ch.get()) ||
-                ch.get() == '_') {
+        while (index < length && (Character.isAlphabetic(ch.get()) || Character.isDigit(ch.get()))) {
             bld.append(ch.get());
             index++;
         }
@@ -159,13 +155,18 @@ public class Lexer {
                 tokenFromKeyWord = KeyWordTable.symbol(possibleKeyWord);
                 this.index = tempIndex;
             }
-            possibleKeyWord += expr.charAt(tempIndex);
+            if (tempIndex < length)
+                possibleKeyWord += expr.charAt(tempIndex);
+            else
+                break;
+
             tempIndex++;
         }
 
         return tokenFromKeyWord;
     }
 
-    private void error(String s) {
+    private void error(String s) throws Exception {
+        throw new Exception("error " +  s + "while parsing at line number  " + lineNumber  );
     }
 }
