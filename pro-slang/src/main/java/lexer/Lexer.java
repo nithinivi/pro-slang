@@ -3,6 +3,7 @@ package lexer;
 import java.util.function.Supplier;
 
 import static lexer.TOKEN.EOF;
+import static lexer.TOKEN.NUMERAL;
 
 public class Lexer {
 
@@ -24,7 +25,7 @@ public class Lexer {
 
     }
 
-    public TOKEN getSymbol() throws Exception {
+    public TOKEN getSymbol() {
         TOKEN tok = null;
         while (index < length && ch.get() == ' ' || index < length && ch.get() == '\t')
             index++;
@@ -117,12 +118,52 @@ public class Lexer {
     }
 
     private TOKEN getDoubleFromString() {
+        var bld = new StringBuilder();
+        while (index < length && Character.isDigit(ch.get())) {
+            bld.append(ch.get());
+            index++;
+        }
+
+        this.number = Double.parseDouble(bld.toString());
+        return NUMERAL;
     }
 
     private TOKEN getVariableSymbol() {
+        if (!Character.isLetter(ch.get()))
+            return EOF;
+
+        var bld = new StringBuilder();
+        while (index < length &&
+                Character.isAlphabetic(ch.get()) ||
+                Character.isDigit(ch.get()) ||
+                ch.get() == '_') {
+            bld.append(ch.get());
+            index++;
+        }
+        variableName = bld.toString();
+        if (Character.isLowerCase(variableName.charAt(0)))
+            return TOKEN.LC_WORD;
+        else
+            return TOKEN.UC_WORD;
+
+
     }
 
     private TOKEN getKeyWordSymbol() {
+        String possibleKeyWord = "";
+        int tempIndex = index;
+        TOKEN tokenFromKeyWord = KeyWordTable.symbol(possibleKeyWord);
+
+        while (KeyWordTable.keywordMatchCount(possibleKeyWord) > 0) {
+            if (KeyWordTable.symbol(possibleKeyWord) != EOF) {
+                tokenFromKeyWord = KeyWordTable.symbol(possibleKeyWord);
+                this.index = tempIndex;
+            }
+            possibleKeyWord += expr.charAt(tempIndex);
+            tempIndex++;
+        }
+
+        return tokenFromKeyWord;
     }
 
     private void error(String s) {
