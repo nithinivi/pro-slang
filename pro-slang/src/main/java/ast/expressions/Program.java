@@ -1,4 +1,7 @@
-package ast;
+package ast.expressions;
+
+import ast.Expression;
+import ast.Tag;
 
 public class Program extends Expression {
 
@@ -16,5 +19,10 @@ public class Program extends Expression {
 
     public Expression getQuery() {
         return query;
+    }
+
+    @Override
+    public Tag tag() {
+        return Tag.PROGRAM;
     }
 }

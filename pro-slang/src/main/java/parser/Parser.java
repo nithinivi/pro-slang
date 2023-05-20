@@ -1,6 +1,7 @@
 package parser;
 
-import ast.*;
+import ast.Expression;
+import ast.expressions.*;
 import lexer.Lexer;
 import lexer.TOKEN;
 
@@ -33,7 +34,7 @@ public class Parser extends Lexer {
     private Expression parseRules() throws Exception {
         if (!isToken(LC_WORD))
             return null;
-        return new Cons(pRule(), parseRules());
+        return List.cons(pRule(), parseRules());
 
     }
 
@@ -119,17 +120,15 @@ public class Parser extends Lexer {
 
 
     private Expression sequence(Expression expression, TOKEN sep) {
-        return new Cons(expression, rest(expression, sep));
+        return List.cons(expression, rest(expression, sep));
     }
 
     private Expression rest(Expression expression, TOKEN sep) {
         if (isToken(sep))
-            return new Cons(expression, rest(expression, sep));
+            return List.cons(expression, rest(expression, sep));
         else
             return null;
     }
-
-
 
 
 }

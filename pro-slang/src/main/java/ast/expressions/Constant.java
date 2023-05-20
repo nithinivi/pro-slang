@@ -1,4 +1,7 @@
-package ast;
+package ast.expressions;
+
+import ast.Expression;
+import ast.Tag;
 
 public class Constant extends Expression {
 
@@ -10,5 +13,10 @@ public class Constant extends Expression {
 
     public String getCid() {
         return cid;
+    }
+
+    @Override
+    public Tag tag() {
+        return Tag.CONSTANT;
     }
 }

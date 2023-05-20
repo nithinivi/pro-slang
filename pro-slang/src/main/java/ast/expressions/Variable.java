@@ -1,4 +1,7 @@
-package ast;
+package ast.expressions;
+
+import ast.Expression;
+import ast.Tag;
 
 public class Variable extends Expression {
     private final  String vid;
@@ -15,5 +18,10 @@ public class Variable extends Expression {
 
     public Integer getIndex() {
         return index;
+    }
+
+    @Override
+    public Tag tag() {
+        return Tag.VARIABLE;
     }
 }

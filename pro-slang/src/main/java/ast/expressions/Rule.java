@@ -1,4 +1,7 @@
-package ast;
+package ast.expressions;
+
+import ast.Expression;
+import ast.Tag;
 
 public class Rule extends Expression { // eg. p <= q and r.
 
@@ -27,5 +30,10 @@ public class Rule extends Expression { // eg. p <= q and r.
 
     public void setRhs(Expression rhs) {
         this.rhs = rhs;
+    }
+
+    @Override
+    public Tag tag() {
+        return Tag.RULE;
     }
 }

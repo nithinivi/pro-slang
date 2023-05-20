@@ -1,4 +1,7 @@
-package ast;
+package ast.expressions;
+
+import ast.Expression;
+import ast.Tag;
 
 public class Predicate extends Expression {     // eg. h(1,k(p,X))
     private final String id;
@@ -15,5 +18,10 @@ public class Predicate extends Expression {     // eg. h(1,k(p,X))
 
     public Expression getParams() {
         return params;
+    }
+
+    @Override
+    public Tag tag() {
+        return Tag.PREDICATE;
     }
 }

@@ -1,4 +1,7 @@
-package ast;
+package ast.expressions;
+
+import ast.Expression;
+import ast.Tag;
 
 public class Negate extends Expression {  // eg. not p(7)
     private final Expression l;
@@ -9,5 +12,10 @@ public class Negate extends Expression {  // eg. not p(7)
 
     public Expression getL() {
         return l;
+    }
+
+    @Override
+    public Tag tag() {
+        return Tag.NEGATE;
     }
 }

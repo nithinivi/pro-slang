@@ -1,6 +1,9 @@
-package ast;
+package ast.expressions;
 
-public class Func extends Expression{
+import ast.Expression;
+import ast.Tag;
+
+public class Func extends Expression {
     private final String id;
     private final Expression params;
 
@@ -15,5 +18,10 @@ public class Func extends Expression{
 
     public Expression getParams() {
         return params;
+    }
+
+    @Override
+    public Tag tag() {
+        return Tag.FUNC;
     }
 }
