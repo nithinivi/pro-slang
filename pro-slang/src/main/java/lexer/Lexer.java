@@ -165,9 +165,9 @@ public class Lexer {
     }
 
     protected void error(String s) throws Exception {
-        String errorMessage = "error: " + s + " lineno=" + lineNumber +
-                " ch=<" + ch.get() + ">(" + index + ") " +
-                " last word=<" + variableName + ">";
+        String errorMessage = "error: " + s + " lineno = " + lineNumber + "::" + index + " " +
+                " ch=<" + ch.get() +
+                " last word=<" + variableName + "";
         throw new Exception(errorMessage);
     }
 

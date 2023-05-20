@@ -7,7 +7,7 @@ import executor.Env;
 public class PrintAST {
     Expression ast;
 
-    public void printId(String id) {
+    public static void printId(String id) {
         int i = 1;
         while (i < 10) {
             if (id.charAt(i) == ' ')
@@ -20,7 +20,7 @@ public class PrintAST {
     }
 
 
-    public void printTail(List tree) {
+    public static void printTail(List tree) {
         if (tree == null)
             return;
 
@@ -30,7 +30,7 @@ public class PrintAST {
 
     }
 
-    private void printTree(Expression tree, Env e) {
+    private static void printTree(Expression tree, Env e) {
         if (tree == null)
             return;
 

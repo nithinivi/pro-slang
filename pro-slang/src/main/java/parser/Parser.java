@@ -15,11 +15,12 @@ public class Parser extends Lexer {
     }
 
     public Expression parse() throws Exception {
-        return prog();
+        token = getSymbol();
+        return parseprog();
     }
 
 
-    private Expression prog() throws Exception {
+    private Expression parseprog() throws Exception {
 
         Expression facts = parseRules();
         checkTokenAndThrowError(QUESTION, "? expected");
