@@ -4,11 +4,22 @@ import ast.Expression;
 import ast.Tag;
 
 public class Func extends Expression {
-    private final String id;
-    private final Expression params;
+    private String id;
+    private Expression params;
 
     public Func(String id, Expression params) {
         this.id = id;
+        this.params = params;
+    }
+
+    public Func() {
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setParams(Expression params) {
         this.params = params;
     }
 

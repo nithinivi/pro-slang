@@ -4,9 +4,16 @@ import ast.Expression;
 import ast.Tag;
 
 public class Negate extends Expression {  // eg. not p(7)
-    private final Expression l;
+    private Expression l;
 
     public Negate(Expression l) {
+        this.l = l;
+    }
+
+    public Negate() {
+    }
+
+    public void setL(Expression l) {
         this.l = l;
     }
 

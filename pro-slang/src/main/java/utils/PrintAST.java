@@ -8,8 +8,8 @@ public class PrintAST {
     Expression ast;
 
     public static void printId(String id) {
-        int i = 1;
-        while (i < 10) {
+        int i = 0;
+        while (i < id.length()) {
             if (id.charAt(i) == ' ')
                 break;
             else {
@@ -30,7 +30,7 @@ public class PrintAST {
 
     }
 
-    private static void printTree(Expression tree, Env e) {
+    public static void printTree(Expression tree, Env e) {
         if (tree == null)
             return;
 
@@ -85,10 +85,9 @@ public class PrintAST {
                 System.out.println();
                 System.out.print("?");
                 printTree(v.getQuery(), e);
-                System.out.println();
+                System.out.println(".");
             }
             case RULE -> {
-
                 Rule v = (Rule) tree;
                 printTree(v.getLhs(), e);
                 if (v.getRhs() != null) {
