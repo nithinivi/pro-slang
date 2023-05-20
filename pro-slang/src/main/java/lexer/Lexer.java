@@ -24,7 +24,7 @@ public class Lexer {
 
     }
 
-    public TOKEN getSymbol() throws Exception {
+    public TOKEN getToken() throws Exception {
         TOKEN tok = null;
         while (index < length && ch.get() == ' ' || index < length && ch.get() == '\t')
             index++;
@@ -42,12 +42,13 @@ public class Lexer {
                     index++;
                 }
                 index++;
-                tok = getSymbol();
+                tok = getToken();
             }
-            case '\n' -> lineNumber++;
-            case '\r', '\t', ' ' -> {
+            case '\n', '\r', '\t', ' ' -> {
+                if (ch.get() == '\n')
+                    lineNumber++;
                 index++;
-                tok = getSymbol();
+                tok = getToken();
             }
             case '<' -> {
                 index++;
@@ -165,10 +166,24 @@ public class Lexer {
     }
 
     protected void error(String s) throws Exception {
-        String errorMessage = "error: " + s + " lineno = " + lineNumber + "::" + index + " " +
-                " ch=<" + ch.get() +
-                " last word=<" + variableName + "";
+        String errorMessage = "error :: " + "" + s + "  |" + " lineno = " + lineNumber + "::" + index + " \n" + currentLine() +
+                " \n";
         throw new Exception(errorMessage);
+    }
+
+
+    protected String currentLine() {
+        int lineStart = index;
+        while (lineStart >= 0 && lineStart < length) {
+            if (expr.charAt(lineStart) == '\n' || lineStart == 0)
+                break;
+            lineStart--;
+        }
+
+        int lineEnd = expr.substring(index).indexOf('\n');
+
+
+        return expr.substring(lineStart, index + lineEnd);
     }
 
     protected String getVariableName() {

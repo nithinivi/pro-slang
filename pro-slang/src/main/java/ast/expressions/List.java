@@ -13,6 +13,20 @@ public class List extends Expression {
         this.tl = tl;
     }
 
+    public static List cons(Expression h, Expression t) {
+        return new List(h, t);
+    }
+
+    public static Expression append(Expression a, Expression b) {
+        if (a == null)
+            return b;
+        else {
+            var al = (List) a;
+            var bl = (List) b;
+            return cons(al.getHd(), append(al.getTl(), bl));
+        }
+    }
+
     public Expression getHd() {
         return hd;
     }
@@ -32,20 +46,6 @@ public class List extends Expression {
     @Override
     public Tag tag() {
         return Tag.LIST;
-    }
-
-    public static Expression cons(Expression h, Expression t) {
-        return new List(h, t);
-    }
-
-    public static Expression append(Expression a, Expression b) {
-        if (a == null)
-            return b;
-        else {
-            var al = (List) a;
-            var bl = (List) b;
-            return cons(al.getHd(), append(al.getTl(), bl));
-        }
     }
 
 }

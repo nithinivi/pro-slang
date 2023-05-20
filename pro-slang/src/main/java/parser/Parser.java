@@ -5,6 +5,8 @@ import ast.expressions.*;
 import lexer.Lexer;
 import lexer.TOKEN;
 
+import java.util.function.Supplier;
+
 import static lexer.TOKEN.*;
 
 public class Parser extends Lexer {
@@ -15,8 +17,27 @@ public class Parser extends Lexer {
     }
 
     public Expression parse() throws Exception {
-        token = getSymbol();
+        parseToken();
         return parseprog();
+    }
+
+    private boolean isToken(TOKEN s) throws Exception {
+        if (s != token)
+            return false;
+        token = getToken();
+        return true;
+    }
+
+
+    private void checkTokenAndThrowError(TOKEN t, String s) throws Exception {
+        if (this.token != t)
+            error(s);
+        parseToken();
+    }
+
+
+    private void parseToken() throws Exception {
+        this.token = getToken();
     }
 
 
@@ -24,26 +45,26 @@ public class Parser extends Lexer {
 
         Expression facts = parseRules();
         checkTokenAndThrowError(QUESTION, "? expected");
-
-        Expression parseLiteral = parseLiteral();
-        Expression query = sequence(parseLiteral, AND);
+        Expression query = sequence(lazyParseLiteral, AND);
         checkTokenAndThrowError(DOT, "missing . ");
 
         return new Program(facts, query);
     }
 
     private Expression parseRules() throws Exception {
-        if (!isToken(LC_WORD))
+        if (token != LC_WORD)
             return null;
-        return List.cons(pRule(), parseRules());
+        List cons = List.cons(parseRule(), null);
+        cons.setTl(parseRules());
+        return cons;
 
     }
 
-    private Expression pRule() throws Exception {
+    private Expression parseRule() throws Exception {
         Rule rule = new Rule();
         rule.setLhs(parseAtom());
         if (isToken(IMPLIED_BY))
-            rule.setRhs(sequence(parseLiteral(), AND));
+            rule.setRhs(sequence(lazyParseLiteral, AND));
         else
             rule.setRhs(null);
         checkTokenAndThrowError(DOT, ". expected");
@@ -53,38 +74,26 @@ public class Parser extends Lexer {
     private Expression parseLiteral() throws Exception {
         if (isToken(NOT))
             return new Negate(parseAtom());
-        else
-            return parseAtom();
+        else return parseAtom();
     }
 
     private Expression parseAtom() throws Exception {
-        if (isToken(LC_WORD)) {
-            String word = getVariableName();
-            parseToken();
-            return new Predicate(word, parseTerms());
+        if (token != LC_WORD)
+            error("no predicate");
 
-        }
-
-        error("no predicate");
-
-        return null;
+        String word = getVariableName();
+        parseToken();
+        var expression = parseTerms();
+        return new Predicate(word, expression);
     }
 
-
-    private void checkTokenAndThrowError(TOKEN token, String s) throws Exception {
-        if (this.token != token)
-            error(s);
+    private Expression parseTerms() throws Exception {
+        if (!isToken(OPEN))
+            return null;
+        Expression p = sequence(lazyParseTerm, COMMA);
+        checkTokenAndThrowError(CLOSE, ") excepted");
+        return p;
     }
-
-    private boolean isToken(TOKEN s) {
-        return s == token;
-    }
-
-
-    private void parseToken() throws Exception {
-        this.token = getSymbol();
-    }
-
 
     private Expression parseTerm() throws Exception {
         Expression term = null;
@@ -110,26 +119,32 @@ public class Parser extends Lexer {
         return term;
     }
 
-    private Expression parseTerms() throws Exception {
-        if (!isToken(OPEN))
-            return null;
 
-        Expression p = sequence(parseTerm(), COMMA);
-        checkTokenAndThrowError(CLOSE, ") excepted");
-        return p;
+    private Expression sequence(Supplier<Expression> expressionSupplier, TOKEN sep) throws Exception {
+        return List.cons(expressionSupplier.get(), rest(expressionSupplier, sep));
     }
 
-
-    private Expression sequence(Expression expression, TOKEN sep) {
-        return List.cons(expression, rest(expression, sep));
-    }
-
-    private Expression rest(Expression expression, TOKEN sep) {
+    private Expression rest(Supplier<Expression> expression, TOKEN sep) throws Exception {
         if (isToken(sep))
-            return List.cons(expression, rest(expression, sep));
-        else
-            return null;
+            return List.cons(expression.get(), rest(expression, sep));
+        else return null;
     }
 
+
+    Supplier<Expression> lazyParseTerm = () -> {
+        try {
+            return parseTerm();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    };
+
+    Supplier<Expression> lazyParseLiteral = () -> {
+        try {
+            return parseLiteral();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    };
 
 }
