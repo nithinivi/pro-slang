@@ -1,4 +1,6 @@
 import ast.Expression;
+import executor.MODE;
+import executor.Executor;
 import parser.Parser;
 import utils.PrintAST;
 
@@ -19,6 +21,8 @@ public class ProSlang {
         Expression parse = parser.parse();
         PrintAST.printTree(parse, null);
 
+        var prover = new Executor();
+        prover.excute(MODE.PRINT_ALL, parse);
 
     }
 }
