@@ -3,6 +3,7 @@ package utils;
 import ast.Expression;
 import ast.expressions.*;
 import executor.Env;
+import executor.UnificationBind;
 
 public class PrintAST {
     Expression ast;
@@ -20,13 +21,13 @@ public class PrintAST {
     }
 
 
-    public static void printTail(List tree) {
+    public static void printTail(Expression tree) {
         if (tree == null)
             return;
-
+        var list = (List) tree;
         System.out.print(",  ");
-        printTree(tree.getHd(), null);
-        printTail((List) tree.getTl());
+        printTree(list.getHd(), null);
+        printTail((List) list.getTl());
 
     }
 
@@ -38,8 +39,16 @@ public class PrintAST {
 
             case VARIABLE -> {
                 Variable v = (Variable) tree;
-                if (v.getIndex() != 0)
-                    System.out.print("-" + v.getIndex());
+                var uni = new UnificationBind();
+                if (uni.bound(tree, e))
+                    printTree(tree, e);
+
+                else {
+                    System.out.print(v.getVid());
+                    if (v.getIndex() != 0)
+                        System.out.print("-" + v.getIndex());
+
+                }
             }
             case CONSTANT -> {
                 Constant v = (Constant) tree;
@@ -58,7 +67,7 @@ public class PrintAST {
             case LIST -> {
                 List v = (List) tree;
                 printTree(v.getHd(), e);
-                printTree(v.getTl(), e);
+                printTail(v.getTl());
             }
             case PREDICATE -> {
                 Predicate v = (Predicate) tree;
@@ -93,9 +102,8 @@ public class PrintAST {
                 if (v.getRhs() != null) {
                     System.out.print(" <= ");
                     printTree(v.getRhs(), e);
-                    System.out.println(".");
                 }
-
+                System.out.println(".");
             }
         }
     }

@@ -15,56 +15,56 @@ public class Executor {
     private Program prog;
     private List query;
 
-    public static Expression rename(Expression tree, int index) {
+    private Expression rename(Expression tree, int index) {
         if (tree == null) return null;
         switch (tree.tag()) {
             case VARIABLE -> {
-                var v = (Variable) tree;
+                var copynode = (Variable) tree;
                 var variable = new Variable();
-                variable.setIndex(v.getIndex());
+                variable.setIndex(copynode.getIndex());
                 return variable;
             }
             case CONSTANT, INT -> {
                 return tree;
             }
             case PREDICATE -> {
-                var p = (Predicate) tree;
-                var predicate = new Predicate();
-                predicate.setParams(rename(p.getParams(), index));
-                return predicate;
+                var predicate = (Predicate) tree;
+                var copynode = new Predicate();
+                copynode.setParams(rename(predicate.getParams(), index));
+                return copynode;
             }
             case FUNC -> {
-                var p = (Func) tree;
-                var func = new Func();
-                func.setParams(rename(p.getParams(), index));
-                return func;
+                var function = (Func) tree;
+                var copynode = new Func();
+                copynode.setParams(rename(function.getParams(), index));
+                return copynode;
             }
             case NEGATE -> {
-                var n = (Negate) tree;
-                var neg = new Negate();
-                neg.setL(rename(n.getL(), index));
-                return neg;
+                var negate = (Negate) tree;
+                var copynode = new Negate();
+                copynode.setL(rename(negate.getL(), index));
+                return copynode;
             }
             case RULE -> {
-                var r = (Rule) tree;
-                var rule = new Rule();
-                rule.setLhs(rename(r.getLhs(), index));
-                rule.setRhs(rename(r.getRhs(), index));
-                return rule;
+                var rule = (Rule) tree;
+                var copynode = new Rule();
+                copynode.setLhs(rename(rule.getLhs(), index));
+                copynode.setRhs(rename(rule.getRhs(), index));
+                return copynode;
             }
             case LIST -> {
-                var c = new List();
-                var list = new List();
-                list.setHd(rename(c.getHd(), index));
-                list.setTl(rename(c.getTl(), index));
-                return list;
+                var copynode = new List();
+                var tl = (List) tree;
+                copynode.setHd(rename(tl.getHd(), index));
+                copynode.setTl(rename(tl.getTl(), index));
+                return copynode;
             }
         }
         throw new IllegalStateException("Unexpected value: " + tree.tag());
 
     }
 
-    public void excute(MODE search, Expression program) {
+    public void execute(MODE search, Expression program) {
         index = 0;
         this.search = search;
 
