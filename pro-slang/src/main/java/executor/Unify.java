@@ -11,7 +11,8 @@ public class Unify {
 
     public boolean unify(Expression a, Expression b, Env oldEnv) {
         env = oldEnv;
-        if (a == null && b == null) return true;
+        if (a == null && b == null)
+            return true;
         else if (Objects.equals(a.tag(), b.tag())) {
             switch (a.tag()) {
                 case VARIABLE -> {
@@ -72,7 +73,6 @@ public class Unify {
                 this.env = bind(a, b, oldEnv);
                 return true;
             }
-
         } else if (b.tag() == Tag.VARIABLE) {
             return unify(b, a, oldEnv);
         }
@@ -82,11 +82,11 @@ public class Unify {
     public Env bind(Expression x, Expression val, Env e) {
         var varX = (Variable) x;
         var varVal = (Variable) val;
-        var env = new Env();
-        env.setId(varX.getVid());
-        env.setIndex(varX.getIndex());
-        env.setVal(varVal);
-        env.setNext(e);
-        return env;
+        var newEnv = new Env();
+        newEnv.setId(varX.getVid());
+        newEnv.setIndex(varX.getIndex());
+        newEnv.setVal(varVal);
+        newEnv.setNext(e);
+        return newEnv;
     }
 }
