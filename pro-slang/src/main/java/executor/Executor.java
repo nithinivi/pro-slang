@@ -57,6 +57,7 @@ public class Executor {
                 var list = new List();
                 list.setHd(rename(c.getHd(), index));
                 list.setTl(rename(c.getTl(), index));
+                return list;
             }
         }
         throw new IllegalStateException("Unexpected value: " + tree.tag());
@@ -110,9 +111,9 @@ public class Executor {
             var unifier = new Unify();
             var facts = (List) f;
             var ruleHd = (Rule) facts.getHd();
-            var ruleTl = (Rule) facts.getTl();
+            var ruleTl = (List) facts.getTl();
 
-            if (unifier.unify(p, rename(ruleHd.getRhs(), index),env)) {
+            if (unifier.unify(p, rename(ruleHd.getRhs(), index), env)) {
                 proveList(
                         List.append(
                                 rename(ruleHd.getRhs(), index),
