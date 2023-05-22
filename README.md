@@ -2,7 +2,6 @@
 
 Pro-Slang is a prolog interpreter written in java. It is a port of prolog interpreter written by L. Allison of Monash University. Full article about the same is available at https://users.monash.edu/~lloyd/tildeLogic/Prolog.toy/
 
-:bug: not completed , bugs are been sorted out
 
 ## BNF
 ```
@@ -22,8 +21,21 @@ atom       ::= ident | ident(terms)
 
 ```
 
-## Example
+## Examples
 
+```
+parent(chacko, wilson).
+parent(wilson, kuttan).
+
+grandfather(X, Y) <= parent(X, Z) and parent(Z,Y).
+
+?grandfather(chacko, kuttan).
+```
+
+```
+yes
+```
+---
 ```
 witch(X)  <= burns(X) and female(X).
 burns(X)  <= wooden(X).
@@ -44,6 +56,6 @@ yes
 
 
 # Acknowledgement
----
-- This port inspired was by my Guru @praseedpai
-- Knowledge to port from pascal to java where largely from  https://github.com/sinsinan/fslang by @sinsinan
+
+- This was motivated and influenced by the guidance of my guru [Praseed Pai](https://github.com/praseedpai)
+- Knowledge to port from pascal to java where largely from  https://github.com/sinsinan/fslang by [sinsinan](https://github.com/sinsinan)
