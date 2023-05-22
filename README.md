@@ -56,5 +56,6 @@ yes
 
 
 # Acknowledgement
-- This port inspired was by my Guru @praseedpai
-- Knowledge to port from pascal to java where largely from  https://github.com/sinsinan/fslang by @sinsinan
+
+- This was motivated and influenced by the guidance of my guru [Praseed Pai](https://github.com/praseedpai)
+- Knowledge to port from pascal to java where largely from  https://github.com/sinsinan/fslang by [sinsinan](https://github.com/sinsinan)
