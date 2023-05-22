@@ -2,10 +2,7 @@ package executor;
 
 import ast.Expression;
 import ast.Tag;
-import ast.expressions.List;
-import ast.expressions.Negate;
-import ast.expressions.Program;
-import ast.expressions.Rule;
+import ast.expressions.*;
 
 import static ast.expressions.List.cons;
 import static executor.Renaming.rename;
@@ -66,14 +63,14 @@ public class Prove {
                 var fact_list = (List) f;
                 var left = ((Rule) fact_list.getHd()).getLhs();
                 var right = ((Rule) (fact_list.getHd())).getRhs();
-                var tl = fact_list.getTl();
+                var tl = ((List) query).getTl();
 
                 var uni = new Unification();
 
                 if (uni.unify(p, rename(left, index), env)) {
                     proveList(List.append(rename(right, index), tl), facts, uni.getEnv());
                 }
-                proveLiteral(p, tl, env);
+                proveLiteral(p, ((List) f).getTl(), env);
             }
         }
     }
