@@ -75,9 +75,8 @@ public class Unification {
                 case LIST -> {
                     var la = (List) a;
                     var lb = (List) b;
-                    var uni = new Unification();
-                    if (newUnify(la.getHd(), lb.getHd(), oldEnv))
-                        return newUnify(la.getTl(), lb.getTl(), uni.env);
+                     if (newUnify(la.getHd(), lb.getHd(), oldEnv))
+                        return newUnify(la.getTl(), lb.getTl(), this.env);
                     else
                         return false;
                 }

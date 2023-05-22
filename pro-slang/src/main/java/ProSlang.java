@@ -11,9 +11,9 @@ public class ProSlang {
                                 
                 parent(john, jim).
                                 
-                grandparent(X, Z) <= parent(X, Z).
+                relation(X, Z) <= parent(X, Z).
                 
-                ?parent(john, jim).
+                ?relation(john, jim).
                 
                 """;
         Parser parser = new Parser(data);

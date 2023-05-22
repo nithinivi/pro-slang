@@ -63,11 +63,12 @@ public class Prove {
             }
         } else {
             if (f != null) {
-                var uni = new Unification();
                 var fact_list = (List) f;
                 var left = ((Rule) fact_list.getHd()).getLhs();
                 var right = ((Rule) (fact_list.getHd())).getRhs();
                 var tl = fact_list.getTl();
+
+                var uni = new Unification();
 
                 if (uni.unify(p, rename(left, index), env)) {
                     proveList(List.append(rename(right, index), tl), facts, uni.getEnv());
