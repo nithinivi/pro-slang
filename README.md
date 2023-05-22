@@ -14,7 +14,29 @@ literals   ::= literal [ and literal ]
 literal    ::= atom | not atom
 
 atom       ::= ident | ident(terms)
+
 ```
+
+## Example
+
+```
+witch(X)  <= burns(X) and female(X).
+burns(X)  <= wooden(X).
+wooden(X) <= floats(X).
+floats(X) <= sameweight(duck, X).
+
+female(girl).
+sameweight(duck,girl).
+
+? witch(girl).
+```
+
+```
+yes
+```
+
+ Knight Sir Bedevere provides complete reasoning for above logic in this [video](https://www.youtube.com/watch?v=iGx1hiSJbCo)
+
 
 Note
 ---

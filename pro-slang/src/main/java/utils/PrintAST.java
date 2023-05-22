@@ -3,7 +3,7 @@ package utils;
 import ast.Expression;
 import ast.expressions.*;
 import executor.Env;
-import executor.UnificationBind;
+import executor.Binding;
 
 public class PrintAST {
     Expression ast;
@@ -39,7 +39,7 @@ public class PrintAST {
 
             case VARIABLE -> {
                 Variable v = (Variable) tree;
-                var uni = new UnificationBind();
+                var uni = new Binding();
                 if (uni.bound(tree, e))
                     printTree(tree, e);
 

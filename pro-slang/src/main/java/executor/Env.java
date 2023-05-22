@@ -1,12 +1,13 @@
 package executor;
 
+import ast.Expression;
 import ast.expressions.Variable;
 
 public class Env {
     private String id;
     private Integer index;
     private Env next;
-    private Variable val;
+    private Expression val;
 
     public Env() {
     }
@@ -35,11 +36,11 @@ public class Env {
         this.next = next;
     }
 
-    public Variable getVal() {
+    public Expression getVal() {
         return val;
     }
 
-    public void setVal(Variable val) {
+    public void setVal(Expression val) {
         this.val = val;
     }
 }

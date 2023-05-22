@@ -5,8 +5,8 @@ import ast.expressions.Variable;
 
 import java.util.Objects;
 
-public class UnificationBind {
-    private Variable val = null;
+public class Binding {
+    private Expression val = null;
 
     public boolean bound(Expression x, Env e) {
         var vx = (Variable) x;
@@ -15,13 +15,13 @@ public class UnificationBind {
 
         else if (Objects.equals(e.getId(), vx.getVid())
                 && Objects.equals(e.getIndex(), vx.getIndex())) {
-            this.val = e.getVal();
+            this.val =  e.getVal();
             return true;
         } else
             return bound(x, e.getNext());
     }
 
-    public Variable getVal() {
+    public Expression getVal() {
         return val;
     }
 }

@@ -2,6 +2,8 @@ package ast;
 
 import lexer.TOKEN;
 
-public abstract class Expression {
+import java.io.Serializable;
+
+public abstract class Expression implements Serializable {
     public abstract Tag tag();
 }

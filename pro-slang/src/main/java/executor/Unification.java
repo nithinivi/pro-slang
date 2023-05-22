@@ -6,11 +6,15 @@ import ast.expressions.*;
 
 import java.util.Objects;
 
-public class Unify {
+import static utils.PrintAST.printTree;
+
+public class Unification {
+
     private Env env; // newenv
 
     public boolean unify(Expression a, Expression b, Env oldEnv) {
         env = oldEnv;
+        printTree(a, oldEnv);
         if (a == null && b == null)
             return true;
         else if (Objects.equals(a.tag(), b.tag())) {
@@ -18,7 +22,7 @@ public class Unify {
                 case VARIABLE -> {
                     var va = (Variable) a;
                     var vb = (Variable) b;
-                    var uniEnv = new UnificationBind();
+                    var uniEnv = new Binding();
                     if (uniEnv.bound(a, oldEnv)) {
                         return unify(uniEnv.getVal(), b, oldEnv);
                     } else if (Objects.equals(va.getVid(), vb.getVid()) && Objects.equals(va.getIndex(), vb.getIndex())) {
@@ -57,7 +61,7 @@ public class Unify {
                 case LIST -> {
                     var la = (List) a;
                     var lb = (List) b;
-                    var uni = new Unify();
+                    var uni = new Unification();
                     if (uni.unify(la.getHd(), lb.getHd(), oldEnv))
                         return unify(la.getTl(), lb.getTl(), uni.env);
                     else
@@ -66,7 +70,7 @@ public class Unify {
                 default -> throw new IllegalStateException("Unexpected value whike unification: " + a.tag());
             }
         } else if (a.tag() == Tag.VARIABLE) {
-            var uniEnv = new UnificationBind();
+            var uniEnv = new Binding();
             if (uniEnv.bound(a, oldEnv)) {
                 return unify(uniEnv.getVal(), b, oldEnv);
             } else {
@@ -79,13 +83,16 @@ public class Unify {
         return false;
     }
 
+    public Env getEnv() {
+        return env;
+    }
+
     public Env bind(Expression x, Expression val, Env e) {
         var varX = (Variable) x;
-        var varVal = (Variable) val;
         var newEnv = new Env();
         newEnv.setId(varX.getVid());
         newEnv.setIndex(varX.getIndex());
-        newEnv.setVal(varVal);
+        newEnv.setVal(val);
         newEnv.setNext(e);
         return newEnv;
     }
