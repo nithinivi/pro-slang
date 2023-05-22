@@ -20,7 +20,15 @@ public class Binding {
         } else
             return bound(x, e.getNext());
     }
-
+    public static Env bind(Expression x, Expression val, Env e) {
+        var varX = (Variable) x;
+        var newEnv = new Env();
+        newEnv.setId(varX.getVid());
+        newEnv.setIndex(varX.getIndex());
+        newEnv.setVal(val);
+        newEnv.setNext(e);
+        return newEnv;
+    }
     public Expression getVal() {
         return val;
     }

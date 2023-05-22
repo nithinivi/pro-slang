@@ -6,9 +6,18 @@ import ast.expressions.*;
 
 import java.util.Objects;
 
+import static executor.Binding.bind;
+
 public class Unification {
 
     private Env env; // newenv
+
+    private boolean newUnify(Expression a, Expression b, Env e) {
+        var uni = new Unification();
+        boolean uniResp = uni.unify(a, b, e);
+        this.env = uni.getEnv();
+        return uniResp;
+    }
 
     public boolean unify(Expression a, Expression b, Env oldEnv) {
         env = oldEnv;
@@ -22,11 +31,17 @@ public class Unification {
                     var va = (Variable) a;
                     var vb = (Variable) b;
                     var uniEnv = new Binding();
-                    if (uniEnv.bound(a, oldEnv)) {
-                        return unify(uniEnv.getVal(), b, oldEnv);
-                    } else if (Objects.equals(va.getVid(), vb.getVid()) && Objects.equals(va.getIndex(), vb.getIndex())) {
+
+                    if (uniEnv.bound(a, oldEnv))
+                        return newUnify(uniEnv.getVal(), b, oldEnv);
+
+                    else if (uniEnv.bound(b, oldEnv))
+                        return newUnify(a, uniEnv.getVal(), oldEnv);
+
+                    else if (va.getVid().equals(vb.getVid()) && va.getIndex().equals(vb.getIndex()))
                         return true;
-                    } else {
+
+                    else {
                         env = bind(a, b, oldEnv);
                         return true;
                     }
@@ -45,7 +60,7 @@ public class Unification {
                     var fa = (Func) a;
                     var fb = (Func) b;
                     if (Objects.equals(fa.getId(), fb.getId()))
-                        return unify(fa.getParams(), fb.getParams(), oldEnv);
+                        return newUnify(fa.getParams(), fb.getParams(), oldEnv);
                     else return
                             false;
                 }
@@ -53,7 +68,7 @@ public class Unification {
                     var pa = (Predicate) a;
                     var pb = (Predicate) b;
                     if (Objects.equals(pa.getId(), pb.getId()))
-                        return unify(pa.getParams(), pb.getParams(), oldEnv);
+                        return newUnify(pa.getParams(), pb.getParams(), oldEnv);
                     else return
                             false;
                 }
@@ -61,8 +76,8 @@ public class Unification {
                     var la = (List) a;
                     var lb = (List) b;
                     var uni = new Unification();
-                    if (uni.unify(la.getHd(), lb.getHd(), oldEnv))
-                        return unify(la.getTl(), lb.getTl(), uni.env);
+                    if (newUnify(la.getHd(), lb.getHd(), oldEnv))
+                        return newUnify(la.getTl(), lb.getTl(), uni.env);
                     else
                         return false;
                 }
@@ -71,13 +86,13 @@ public class Unification {
         } else if (a.tag() == Tag.VARIABLE) {
             var uniEnv = new Binding();
             if (uniEnv.bound(a, oldEnv)) {
-                return unify(uniEnv.getVal(), b, oldEnv);
+                return newUnify(uniEnv.getVal(), b, oldEnv);
             } else {
                 this.env = bind(a, b, oldEnv);
                 return true;
             }
         } else if (b.tag() == Tag.VARIABLE) {
-            return unify(b, a, oldEnv);
+            return newUnify(b, a, oldEnv);
         }
         return false;
     }
@@ -86,13 +101,5 @@ public class Unification {
         return env;
     }
 
-    public Env bind(Expression x, Expression val, Env e) {
-        var varX = (Variable) x;
-        var newEnv = new Env();
-        newEnv.setId(varX.getVid());
-        newEnv.setIndex(varX.getIndex());
-        newEnv.setVal(val);
-        newEnv.setNext(e);
-        return newEnv;
-    }
+
 }
