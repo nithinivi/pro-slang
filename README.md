@@ -36,7 +36,7 @@ grandfather(X, Y) <= parent(X, Z) and parent(Z,Y).
 ```
 yes
 ```
---
+---
 ```
 witch(X)  <= burns(X) and female(X).
 burns(X)  <= wooden(X).
