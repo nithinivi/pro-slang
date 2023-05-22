@@ -2,7 +2,6 @@
 
 Pro-Slang is a prolog interpreter written in java. It is a port of prolog interpreter written by L. Allison of Monash University. Full article about the same is available at https://users.monash.edu/~lloyd/tildeLogic/Prolog.toy/
 
-:bug: not completed , bugs are been sorted out
 
 ## BNF
 ```
