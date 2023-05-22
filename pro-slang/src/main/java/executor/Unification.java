@@ -6,17 +6,17 @@ import ast.expressions.*;
 
 import java.util.Objects;
 
-import static utils.PrintAST.printTree;
-
 public class Unification {
 
     private Env env; // newenv
 
     public boolean unify(Expression a, Expression b, Env oldEnv) {
         env = oldEnv;
-        if (a == null && b == null)
-            return true;
-        else if (Objects.equals(a.tag(), b.tag())) {
+
+        if (a == null || b == null)
+            return a == b;
+
+        else if (a.tag().equals(b.tag())) {
             switch (a.tag()) {
                 case VARIABLE -> {
                     var va = (Variable) a;

@@ -11,7 +11,8 @@ public class ProSlang {
                                 
                 parent(john, jim).
                                 
-                grandparent(X, Z) <= parent(X, Y).
+                grandparent(X, Z) <= parent(X, Z).
+                
                 ?grandparent(john, jim).
                 
                 """;

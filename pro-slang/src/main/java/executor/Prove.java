@@ -39,15 +39,12 @@ public class Prove {
             switch (search) {
                 case PRINT_ALL -> {
                     System.out.print("Query: ");
-                    var program = (Program) query;
+                    var program = (Program) prog;
                     printTree(program.getQuery(), env);
                     System.out.println(" yes");
                     satisfied = true;
                 }
-                case SILENT -> {
-
-                    satisfied = true;
-                }
+                case SILENT -> satisfied = true;
             }
         } else {
             index++;
@@ -59,7 +56,7 @@ public class Prove {
     private void proveLiteral(Expression p, Expression f, Env env) {
         if (p.tag() == Tag.NEGATE) {
             var neg = (Negate) p;
-            var newProof = new Prove(index, prog);
+            var newProof = new Prove(index, this.prog);
             if (!newProof.prove(MODE.SILENT, cons(neg.getL(), null), f, env)) {
                 var tl = ((List) query).getTl();
                 proveList(tl, f, env);
@@ -67,15 +64,15 @@ public class Prove {
         } else {
             if (f != null) {
                 var uni = new Unification();
-                var fl = (List) f;
-                var lhs = ((Rule) fl.getHd()).getLhs();
-                var rhs = ((Rule) (fl.getHd())).getRhs();
-                var tl = fl.getTl();
+                var fact_list = (List) f;
+                var left = ((Rule) fact_list.getHd()).getLhs();
+                var right = ((Rule) (fact_list.getHd())).getRhs();
+                var tl = fact_list.getTl();
 
-                if (uni.unify(p, rename(lhs, index), env)) {
-                    proveList(List.append(rename(rhs, index), tl), facts, uni.getEnv());
+                if (uni.unify(p, rename(left, index), env)) {
+                    proveList(List.append(rename(right, index), tl), facts, uni.getEnv());
                 }
-                proveLiteral(p,tl, env);
+                proveLiteral(p, tl, env);
             }
         }
     }
