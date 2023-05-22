@@ -51,6 +51,4 @@ public class List extends Expression {
             return cons(al.getHd(), append(al.getTl(), bl));
         }
     }
-
-
 }

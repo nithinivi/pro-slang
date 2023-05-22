@@ -14,7 +14,6 @@ public class Unification {
 
     public boolean unify(Expression a, Expression b, Env oldEnv) {
         env = oldEnv;
-        printTree(a, oldEnv);
         if (a == null && b == null)
             return true;
         else if (Objects.equals(a.tag(), b.tag())) {
