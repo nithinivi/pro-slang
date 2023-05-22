@@ -22,8 +22,21 @@ atom       ::= ident | ident(terms)
 
 ```
 
-## Example
+## Examples
 
+```
+parent(chacko, wilson).
+parent(wilson, kuttan).
+
+grandfather(X, Y) <= parent(X, Z) and parent(Z,Y).
+
+?grandfather(chacko, kuttan).
+```
+
+```
+yes
+```
+--
 ```
 witch(X)  <= burns(X) and female(X).
 burns(X)  <= wooden(X).
@@ -44,6 +57,5 @@ yes
 
 
 # Acknowledgement
----
 - This port inspired was by my Guru @praseedpai
 - Knowledge to port from pascal to java where largely from  https://github.com/sinsinan/fslang by @sinsinan
